@@ -71,9 +71,17 @@ safe to delete/rebuild at any time.
 - Embeddings use ONNX Runtime (`all-MiniLM-L6-v2`) instead of
   sentence-transformers/PyTorch, because PyTorch's official wheels require
   AVX2, which some older CPUs lack. Same model, portable runtime.
-- `chroma-hnswlib` is pinned to `0.7.3` in `backend/requirements.txt`
-  because `0.7.6` (chromadb 0.5.23's default) segfaults on non-AVX2 CPUs
-  once its index grows past the first insert batch.
+- `chroma-hnswlib` `0.7.6` (chromadb 0.5.23's pinned version) segfaults on
+  non-AVX2 CPUs once its index grows past the first insert batch. Because
+  chromadb hard-pins `==0.7.6`, this cannot be expressed in
+  `requirements.txt` — pip would refuse to resolve it. On such a machine,
+  downgrade after installing instead:
+
+  ```bash
+  pip install --no-deps chroma-hnswlib==0.7.3
+  ```
+
+  Cloud hosts (Render, etc.) run on AVX2-capable CPUs and need no override.
 
 ## Cloning this repo
 
