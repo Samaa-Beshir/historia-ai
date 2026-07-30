@@ -75,9 +75,65 @@ safe to delete/rebuild at any time.
   because `0.7.6` (chromadb 0.5.23's default) segfaults on non-AVX2 CPUs
   once its index grows past the first insert batch.
 
+## Cloning this repo
+
+`data/row` (460MB of source PDFs) is **not** tracked, so the pipeline scripts
+cannot be re-run from a fresh clone. You do not need them: the vector index
+ships prebuilt as `data/chroma_index.tar.gz`, and `data/processed/chunks.jsonl`
+plus `data/metadata.csv` are tracked so the index can be rebuilt without the
+PDFs. After cloning:
+
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\pip install -r requirements.txt
+.venv\Scripts\python -m app.scripts.prepare_index   # expands the index, warms the model
+```
+
+`prepare_index` is idempotent — it skips the restore if an index is already
+present.
+
 ## Deployment
 
-See `docker-compose.yml` for a two-container (backend + frontend) setup.
-`GET /health` and `GET /version` are available for platform health checks
-(Railway, Render, etc.). Configuration is entirely environment-variable
-driven — see `.env.example`.
+The backend and frontend deploy as **two services from this one repo**. They
+communicate over REST only, so they do not need to share a host.
+
+### Backend → Render
+
+`render.yaml` is a ready-to-use blueprint. Point Render at this repo and it
+will pick it up. Two values must be set in the dashboard (they are marked
+`sync: false` and are never committed):
+
+- `GEMINI_API_KEY` — from [Google AI Studio](https://aistudio.google.com/apikey)
+- `CORS_ORIGINS` — the Vercel origin, e.g. `["https://your-app.vercel.app"]`.
+  Until this is set, the deployed UI's requests are rejected by CORS.
+
+The build step runs `prepare_index`, which expands the committed index and
+pre-downloads the ~167MB ONNX model so neither happens on the cold-start path.
+
+### Frontend → Vercel
+
+Import the repo with **Root Directory** set to `frontend`, and set:
+
+- `NEXT_PUBLIC_API_BASE_URL` — the Render service URL.
+
+This is inlined at build time, so changing it requires a redeploy, not just a
+restart.
+
+### Free-tier caveats
+
+- Render's free tier sleeps after 15 minutes idle and takes ~1 minute to wake.
+  The chat UI shows a "waking the server up" hint after 5 seconds.
+- Free-tier Gemini quota is per-project and varies by model. Some keys have
+  zero quota for `gemini-2.0-flash`; check with
+  `GET https://generativelanguage.googleapis.com/v1beta/models` before picking
+  `GEMINI_MODEL`.
+- Gemini 3.x are thinking models — reasoning tokens come out of the same budget
+  as the reply, so `LLM_MAX_OUTPUT_TOKENS` must be well above the default 1024
+  or answers truncate mid-sentence.
+
+### Docker
+
+`docker-compose.yml` runs both services locally in containers.
+`GET /health` and `GET /version` are available for platform health checks.
+Configuration is entirely environment-variable driven — see `.env.example`.
