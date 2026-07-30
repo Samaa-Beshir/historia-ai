@@ -1,0 +1,40 @@
+# Render blueprint for the Historia AI backend.
+#
+# The frontend is deployed separately to Vercel (rootDir: frontend) and reaches
+# this service over REST, per docs/FRONTEND_GUIDELINES.md.
+#
+# rootDir is `backend`, but Settings resolves data paths from PROJECT_ROOT
+# (= backend/..), so the repo's data/ directory is still found. The build step
+# expands data/chroma_index.tar.gz and pre-downloads the ONNX embedding model
+# so neither lands on the cold-start path.
+services:
+  - name: historia-ai-api
+    type: web
+    runtime: python
+    plan: free
+    rootDir: backend
+    healthCheckPath: /health
+    buildCommand: pip install -r requirements.txt && python -m app.scripts.prepare_index
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash
+      - key: LLM_MAX_OUTPUT_TOKENS
+        value: "4096"
+      - key: RETRIEVAL_TOP_K
+        value: "5"
+      # Set in the Render dashboard, never committed.
+      - key: GEMINI_API_KEY
+        sync: false
+      # Set to the Vercel origin once it exists, e.g. ["https://historia-ai.vercel.app"].
+      # Until then the deployed UI's requests are blocked by CORS.
+      - key: CORS_ORIGINS
+        sync: false

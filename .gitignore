@@ -1,0 +1,43 @@
+# Secrets
+.env
+.env.local
+*.local
+
+# Backend
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.pytest_cache/
+
+# Raw dataset: 460MB of source PDFs, never modified and too large for git.
+data/row/
+
+# The live vector index is derived, but too large to commit uncompressed —
+# it ships as data/chroma_index.tar.gz and is expanded by
+# `python -m app.scripts.prepare_index` at deploy time.
+data/chroma/
+
+# chunks.jsonl is tracked (see !rule below) so the index can be rebuilt
+# without the raw PDFs; everything else here is scratch.
+data/processed/*
+!data/processed/chunks.jsonl
+
+# NOTE: data/metadata.csv is deliberately NOT ignored. It carries hand-corrected
+# titles/authors that `build_metadata.py` cannot regenerate from the PDFs.
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local dev logs and scratch
+*.log
+debug
+
+# Machine-local tool state (settings.json is shared; .local.json is personal)
+.claude/settings.local.json
+.remember/

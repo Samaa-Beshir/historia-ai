@@ -1,0 +1,18 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.0
+chromadb==0.5.23
+# Pinned below chromadb's default (0.7.6): that build segfaults on CPUs
+# without AVX2 (e.g. pre-Haswell Intel) when its HNSW index resizes past
+# the first insert batch. 0.7.3 does not have this issue.
+chroma-hnswlib==0.7.3
+onnxruntime==1.19.2
+google-generativeai==0.8.3
+pypdf==5.1.0
+numpy==1.26.4
+
+# testing
+pytest==8.3.4
+pytest-mock==3.14.0
+httpx==0.28.1

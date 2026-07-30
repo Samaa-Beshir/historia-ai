@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      CORS_ORIGINS: '["http://localhost:3000"]'
+      RAW_BOOKS_DIR: /data/row
+      PROCESSED_DIR: /data/processed
+      METADATA_CSV_PATH: /data/metadata.csv
+      CHROMA_PERSIST_DIR: /data/chroma
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/data
+
+  frontend:
+    build: ./frontend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
