@@ -19,6 +19,7 @@ class GeminiEmbeddingProvider(EmbeddingProvider):
         query_task_type: str,
         request_timeout_seconds: float,
         max_retries: int,
+        rate_limit_retry_seconds: float,
     ):
         self._model_name = model_name.removeprefix("models/")
         self._qualified_model_name = f"models/{self._model_name}"
@@ -26,6 +27,7 @@ class GeminiEmbeddingProvider(EmbeddingProvider):
         self._document_task_type = document_task_type
         self._query_task_type = query_task_type
         self._max_retries = max_retries
+        self._rate_limit_retry_seconds = rate_limit_retry_seconds
         self._client = httpx.Client(
             base_url="https://generativelanguage.googleapis.com/v1beta",
             headers={"x-goog-api-key": api_key},
@@ -37,7 +39,8 @@ class GeminiEmbeddingProvider(EmbeddingProvider):
             response = self._client.post(endpoint, json=payload)
             retryable = response.status_code == 429 or response.status_code >= 500
             if retryable and attempt < self._max_retries:
-                time.sleep(2**attempt)
+                delay = self._rate_limit_retry_seconds if response.status_code == 429 else 2**attempt
+                time.sleep(delay)
                 continue
             if not response.is_success:
                 try:

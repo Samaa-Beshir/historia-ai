@@ -33,6 +33,7 @@ def build_embedding_provider(settings: Settings) -> EmbeddingProvider:
             query_task_type=settings.embedding_query_task_type,
             request_timeout_seconds=settings.embedding_request_timeout_seconds,
             max_retries=settings.embedding_max_retries,
+            rate_limit_retry_seconds=settings.embedding_rate_limit_retry_seconds,
         )
     raise ConfigurationError(
         f"Unsupported embedding provider {settings.embedding_provider!r}. "

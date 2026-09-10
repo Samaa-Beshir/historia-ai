@@ -52,6 +52,7 @@ class Settings(BaseSettings):
     embedding_query_task_type: str = Field(default="QUESTION_ANSWERING")
     embedding_request_timeout_seconds: float = Field(default=60.0, gt=0)
     embedding_max_retries: int = Field(default=3, ge=0)
+    embedding_rate_limit_retry_seconds: float = Field(default=65.0, gt=0)
 
     # --- Retrieval ---
     retrieval_top_k: int = Field(default=5)

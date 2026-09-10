@@ -23,6 +23,7 @@ set "EMBEDDING_DOCUMENT_TASK_TYPE=RETRIEVAL_DOCUMENT"
 set "EMBEDDING_QUERY_TASK_TYPE=QUESTION_ANSWERING"
 set "EMBEDDING_REQUEST_TIMEOUT_SECONDS=60"
 set "EMBEDDING_MAX_RETRIES=6"
+set "EMBEDDING_RATE_LIMIT_RETRY_SECONDS=65"
 set "CHROMA_PERSIST_DIR=%CD%\data\chroma_experiments\gemini_embedding_001"
 set "CHROMA_COLLECTION_NAME=historia_gemini_embedding_001"
 
@@ -41,5 +42,6 @@ if "%INDEX_EXIT_CODE%"=="0" (
 ) else (
     echo Indexing paused with an error. Run this file again to resume.
 )
-pause
+echo Press any key to close this window.
+pause >nul
 exit /b %INDEX_EXIT_CODE%

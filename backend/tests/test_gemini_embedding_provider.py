@@ -21,6 +21,7 @@ def make_provider(client_class: Mock) -> tuple[GeminiEmbeddingProvider, Mock]:
         query_task_type="QUESTION_ANSWERING",
         request_timeout_seconds=30,
         max_retries=2,
+        rate_limit_retry_seconds=65,
     )
     return provider, client
 
@@ -84,7 +85,7 @@ def test_provider_retries_rate_limit(client_class, sleep):
     ]
 
     assert provider.embed_query("question") == [1.0, 0.0]
-    sleep.assert_called_once_with(1)
+    sleep.assert_called_once_with(65)
 
 
 @patch("app.ai.embeddings.gemini_provider.httpx.Client")
