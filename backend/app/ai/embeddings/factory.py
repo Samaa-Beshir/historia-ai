@@ -1,8 +1,5 @@
 """Construct the configured embedding provider in one place."""
 from app.ai.embeddings.base import EmbeddingProvider
-from app.ai.embeddings.fastembed_provider import FastEmbedEmbeddingProvider
-from app.ai.embeddings.gemini_provider import GeminiEmbeddingProvider
-from app.ai.embeddings.onnx_minilm_provider import OnnxMiniLMEmbeddingProvider
 from app.config.settings import Settings
 from app.core.exceptions import ConfigurationError
 
@@ -10,14 +7,20 @@ from app.core.exceptions import ConfigurationError
 def build_embedding_provider(settings: Settings) -> EmbeddingProvider:
     provider = settings.embedding_provider.lower()
     if provider == "onnx_minilm":
+        from app.ai.embeddings.onnx_minilm_provider import OnnxMiniLMEmbeddingProvider
+
         return OnnxMiniLMEmbeddingProvider(settings.embedding_model_name)
     if provider == "fastembed":
+        from app.ai.embeddings.fastembed_provider import FastEmbedEmbeddingProvider
+
         return FastEmbedEmbeddingProvider(
             model_name=settings.embedding_model_name,
             cache_dir=settings.embedding_cache_dir,
             threads=settings.embedding_threads,
         )
     if provider == "gemini":
+        from app.ai.embeddings.gemini_provider import GeminiEmbeddingProvider
+
         if settings.gemini_api_key is None:
             raise ConfigurationError(
                 "GEMINI_API_KEY is required when EMBEDDING_PROVIDER is 'gemini'."

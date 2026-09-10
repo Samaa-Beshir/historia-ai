@@ -14,7 +14,7 @@ def test_factory_builds_default_onnx_provider():
     assert isinstance(provider, OnnxMiniLMEmbeddingProvider)
 
 
-@patch("app.ai.embeddings.factory.FastEmbedEmbeddingProvider")
+@patch("app.ai.embeddings.fastembed_provider.FastEmbedEmbeddingProvider")
 def test_factory_passes_multilingual_settings(provider_class: Mock, tmp_path):
     settings = Settings(
         embedding_provider="fastembed",
