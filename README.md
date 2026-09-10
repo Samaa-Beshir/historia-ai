@@ -48,6 +48,18 @@ python -m venv .venv
 
 Run tests: `.venv\Scripts\python -m pytest`
 
+### Build the multilingual Gemini index on Windows
+
+After the backend setup is complete and `GEMINI_API_KEY` is present in the
+project's `.env` file, double-click `build_gemini_index_windows.bat` in the
+project folder. It builds the V2 multilingual index using the Gemini free tier
+and waits between batches to respect its rate limits.
+
+Keep the terminal window open until it reports completion. Progress is saved
+after every batch: if the process stops, run the same file again and it resumes
+without embedding completed chunks again. The API key is read from `.env` and
+is never copied into the script or printed to the terminal.
+
 ### 3. Frontend
 
 ```bash

@@ -42,3 +42,11 @@ def test_reset_clears_collection(tmp_path):
     repo.reset()
 
     assert repo.count() == 0
+
+
+def test_existing_ids_returns_only_stored_ids(tmp_path):
+    repo = ChromaRepository(tmp_path / "chroma", "test_collection")
+    repo.add(ids=["a"], embeddings=[_fake_embedding(0.5)], documents=["x"], metadatas=[{"era": "X"}])
+
+    assert repo.existing_ids(["a", "missing"]) == {"a"}
+    assert repo.existing_ids([]) == set()

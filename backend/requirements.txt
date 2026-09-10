@@ -10,6 +10,7 @@ chromadb==0.5.23
 # the resolver is never asked to satisfy the contradiction:
 #     pip install --no-deps chroma-hnswlib==0.7.3
 onnxruntime==1.19.2
+fastembed==0.7.3
 google-generativeai==0.8.3
 pypdf==5.1.0
 numpy==1.26.4

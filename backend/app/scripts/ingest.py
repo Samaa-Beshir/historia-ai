@@ -2,15 +2,19 @@
 
 Usage:
     python -m app.scripts.ingest
+    python -m app.scripts.ingest --resume
+    python -m app.scripts.ingest --resume --batch-delay-seconds 65
 
 This is a full rebuild of the (derived) vector index — safe to re-run any
 time, since it never touches the raw PDFs or metadata.csv, only the
 derived data/processed and data/chroma directories.
 """
+import argparse
 import json
 import sys
+import time
 
-from app.ai.embeddings.onnx_minilm_provider import OnnxMiniLMEmbeddingProvider
+from app.ai.embeddings.factory import build_embedding_provider
 from app.config.settings import get_settings
 from app.core.logging import configure_logging, get_logger
 from app.data.chroma_repository import ChromaRepository
@@ -19,6 +23,22 @@ from app.data.metadata_repository import MetadataRepository
 logger = get_logger(__name__)
 
 _BATCH_SIZE = 64
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Embed processed chunks into ChromaDB.")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Keep the collection and skip chunk IDs that are already indexed.",
+    )
+    parser.add_argument(
+        "--batch-delay-seconds",
+        type=float,
+        default=0,
+        help="Wait between successful batches (useful for hosted free-tier rate limits).",
+    )
+    return parser.parse_args()
 
 
 def load_chunks(processed_dir) -> list[dict]:
@@ -30,6 +50,7 @@ def load_chunks(processed_dir) -> list[dict]:
 
 
 def main() -> None:
+    args = parse_args()
     settings = get_settings()
     configure_logging(settings.log_level)
 
@@ -43,16 +64,22 @@ def main() -> None:
         logger.error("metadata.csv is empty. Run `python -m app.scripts.build_metadata` first.")
         sys.exit(1)
 
-    embedding_provider = OnnxMiniLMEmbeddingProvider(settings.embedding_model_name)
+    embedding_provider = build_embedding_provider(settings)
     chroma_repo = ChromaRepository(settings.chroma_persist_dir, settings.chroma_collection_name)
-    chroma_repo.reset()
+    if args.resume:
+        logger.info("Resuming ingestion with %d chunks already indexed", chroma_repo.count())
+    else:
+        chroma_repo.reset()
 
-    total = 0
+    total = chroma_repo.count()
     for batch_start in range(0, len(chunks), _BATCH_SIZE):
         batch = chunks[batch_start : batch_start + _BATCH_SIZE]
+        existing_ids = chroma_repo.existing_ids([chunk["chunk_id"] for chunk in batch]) if args.resume else set()
 
         ids, texts, metadatas = [], [], []
         for chunk in batch:
+            if chunk["chunk_id"] in existing_ids:
+                continue
             doc = documents_by_id.get(chunk["document_id"])
             if doc is None:
                 logger.warning("Chunk %s references unknown document_id; skipping", chunk["chunk_id"])
@@ -76,6 +103,12 @@ def main() -> None:
         chroma_repo.add(ids=ids, embeddings=embeddings, documents=texts, metadatas=metadatas)
         total += len(ids)
         logger.info("Ingested %d/%d chunks", total, len(chunks))
+        if args.batch_delay_seconds > 0 and total < len(chunks):
+            logger.info(
+                "Waiting %.1f seconds before the next embedding batch",
+                args.batch_delay_seconds,
+            )
+            time.sleep(args.batch_delay_seconds)
 
     logger.info("Ingestion complete: %d chunks in collection %r", total, settings.chroma_collection_name)
 

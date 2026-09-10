@@ -45,6 +45,13 @@ class Settings(BaseSettings):
     # --- Embeddings ---
     embedding_provider: str = Field(default="onnx_minilm")
     embedding_model_name: str = Field(default="all-MiniLM-L6-v2")
+    embedding_cache_dir: Path = Field(default=PROJECT_ROOT / "data" / "embedding_cache")
+    embedding_threads: int | None = Field(default=None, ge=1)
+    embedding_output_dimensionality: int = Field(default=768, ge=128)
+    embedding_document_task_type: str = Field(default="RETRIEVAL_DOCUMENT")
+    embedding_query_task_type: str = Field(default="QUESTION_ANSWERING")
+    embedding_request_timeout_seconds: float = Field(default=60.0, gt=0)
+    embedding_max_retries: int = Field(default=3, ge=0)
 
     # --- Retrieval ---
     retrieval_top_k: int = Field(default=5)

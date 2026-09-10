@@ -16,7 +16,8 @@ import sys
 import tarfile
 from pathlib import Path
 
-from app.ai.embeddings.onnx_minilm_provider import OnnxMiniLMEmbeddingProvider
+from app.ai.embeddings.factory import build_embedding_provider
+from app.config.settings import Settings
 from app.config.settings import get_settings
 from app.core.logging import configure_logging, get_logger
 
@@ -49,10 +50,10 @@ def restore_index(archive_path: Path, persist_dir: Path) -> bool:
     return True
 
 
-def warm_embedding_model(model_name: str) -> None:
+def warm_embedding_model(settings: Settings) -> None:
     """Trigger the one-time ONNX model download so it happens during build."""
     logger.info("Warming embedding model cache")
-    OnnxMiniLMEmbeddingProvider(model_name).embed_query("warmup")
+    build_embedding_provider(settings).embed_query("warmup")
     logger.info("Embedding model ready")
 
 
@@ -64,7 +65,7 @@ def main() -> None:
     persist_dir.mkdir(parents=True, exist_ok=True)
 
     restore_index(persist_dir.parent / _ARCHIVE_NAME, persist_dir)
-    warm_embedding_model(settings.embedding_model_name)
+    warm_embedding_model(settings)
 
     logger.info("Index preparation complete")
 

@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.ai.embeddings.onnx_minilm_provider import OnnxMiniLMEmbeddingProvider
+from app.ai.embeddings.factory import build_embedding_provider
 from app.ai.llm.factory import build_llm_provider
 from app.ai.retrieval.retriever import Retriever
 from app.api.routes import chat, documents, health
@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):
     app.state.metadata_repository = MetadataRepository(settings.metadata_csv_path)
 
     logger.info("Loading embedding model %r ...", settings.embedding_model_name)
-    embedding_provider = OnnxMiniLMEmbeddingProvider(settings.embedding_model_name)
+    embedding_provider = build_embedding_provider(settings)
     chroma_repository = ChromaRepository(settings.chroma_persist_dir, settings.chroma_collection_name)
     retriever = Retriever(chroma_repository, embedding_provider)
 

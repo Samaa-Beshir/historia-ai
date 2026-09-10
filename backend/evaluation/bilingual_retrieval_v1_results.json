@@ -1,0 +1,48 @@
+{
+  "dataset": "bilingual_retrieval_v1.jsonl",
+  "top_k": 5,
+  "case_count": 14,
+  "baseline": {
+    "provider": "onnx_minilm",
+    "model": "all-MiniLM-L6-v2",
+    "overall": {"hit_rate": 0.8571, "mean_reciprocal_rank": 0.7619},
+    "arabic": {"hit_rate": 0.8571, "mean_reciprocal_rank": 0.6667},
+    "english": {"hit_rate": 0.8571, "mean_reciprocal_rank": 0.8571},
+    "local_benchmark": {"elapsed_seconds": 0.88, "peak_memory_mb": 288.5}
+  },
+  "candidate": {
+    "provider": "fastembed",
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "runtime": "ONNX Runtime CPUExecutionProvider",
+    "overall": {"hit_rate": 1.0, "mean_reciprocal_rank": 0.8452},
+    "arabic": {"hit_rate": 1.0, "mean_reciprocal_rank": 0.8571},
+    "english": {"hit_rate": 1.0, "mean_reciprocal_rank": 0.8333},
+    "local_benchmark": {"elapsed_seconds": 12.46, "peak_memory_mb": 714.9}
+  },
+  "deployment_fit": {
+    "float_onnx_low_memory": {
+      "peak_memory_mb": 698.1,
+      "quality": "unchanged",
+      "decision": "rejected_for_small_instance"
+    },
+    "quantized_onnx_avx2": {
+      "model_size_mb": 118,
+      "peak_memory_mb": 505.9,
+      "decision": "rejected_as_default",
+      "reason": "Insufficient memory headroom and incompatible with the target pre-AVX2 laptop."
+    },
+    "gemini_embedding_001": {
+      "provider_startup_peak_memory_mb": 151.8,
+      "output_dimensions": 768,
+      "quality": "pending_api_key_evaluation",
+      "decision": "recommended_for_next_evaluation"
+    }
+  },
+  "decision": "local_model_selected_for_quality_hosted_model_recommended_for_deployment_test",
+  "notes": [
+    "The candidate found a relevant source for every Arabic and English case within the first five results.",
+    "Arabic MRR improved from 0.6667 to 0.8571.",
+    "English Hit@5 improved to 1.0 while English MRR changed from 0.8571 to 0.8333.",
+    "The current Render service remains on the baseline until the hosted candidate is evaluated with the project API key."
+  ]
+}

@@ -42,6 +42,13 @@ class ChromaRepository:
     def count(self) -> int:
         return self._collection.count()
 
+    def existing_ids(self, ids: list[str]) -> set[str]:
+        """Return the subset already stored, used by resumable ingestion."""
+        if not ids:
+            return set()
+        result = self._collection.get(ids=ids, include=[])
+        return set(result.get("ids", []))
+
     def reset(self) -> None:
         """Delete and recreate the collection. Used only by the ingestion script."""
         name = self._collection.name
