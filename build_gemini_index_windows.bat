@@ -32,7 +32,7 @@ echo The existing progress will be preserved. Keep this window open.
 echo.
 
 pushd backend
-.venv\Scripts\python.exe -m app.scripts.ingest --resume --batch-delay-seconds 65
+.venv\Scripts\python.exe -m app.scripts.ingest --resume --batch-size 32 --batch-delay-seconds 65
 set "INDEX_EXIT_CODE=%ERRORLEVEL%"
 popd
 

@@ -38,6 +38,12 @@ def parse_args() -> argparse.Namespace:
         default=0,
         help="Wait between successful batches (useful for hosted free-tier rate limits).",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=_BATCH_SIZE,
+        help="Number of chunks per embedding request.",
+    )
     return parser.parse_args()
 
 
@@ -51,6 +57,8 @@ def load_chunks(processed_dir) -> list[dict]:
 
 def main() -> None:
     args = parse_args()
+    if args.batch_size < 1:
+        raise ValueError("--batch-size must be at least 1")
     settings = get_settings()
     configure_logging(settings.log_level)
 
@@ -72,8 +80,8 @@ def main() -> None:
         chroma_repo.reset()
 
     total = chroma_repo.count()
-    for batch_start in range(0, len(chunks), _BATCH_SIZE):
-        batch = chunks[batch_start : batch_start + _BATCH_SIZE]
+    for batch_start in range(0, len(chunks), args.batch_size):
+        batch = chunks[batch_start : batch_start + args.batch_size]
         existing_ids = chroma_repo.existing_ids([chunk["chunk_id"] for chunk in batch]) if args.resume else set()
 
         ids, texts, metadatas = [], [], []
