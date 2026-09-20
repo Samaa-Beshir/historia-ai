@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { ApiError, postChat } from "@/lib/api";
-import type { ChatMessage, ConversationSession, HistoriaNote, SavedBookmark } from "@/lib/types";
+import type { ChatMessage, ConversationSession, HistoriaNote, SavedBookmark, WorkspaceSnapshot } from "@/lib/types";
 
 interface ChatState {
   messages: ChatMessage[];
@@ -20,6 +20,7 @@ interface ChatState {
   toggleBookmark: (message: ChatMessage) => void;
   addNote: (text: string) => void;
   deleteNote: (id: string) => void;
+  mergeCloudWorkspace: (workspace: WorkspaceSnapshot) => void;
   sendMessage: (question: string) => Promise<void>;
 }
 
@@ -89,6 +90,30 @@ export const useChatStore = create<ChatState>()(persist((set, get) => ({
     return { notes: [{ id: makeId("note"), text: clean, era: state.activeEra, createdAt: Date.now() }, ...state.notes] };
   }),
   deleteNote: (id) => set((state) => ({ notes: state.notes.filter((note) => note.id !== id) })),
+
+  mergeCloudWorkspace: (remote) => set((state) => {
+    const sessions = [...state.sessions, ...remote.sessions].reduce<ConversationSession[]>((merged, session) => {
+      const existing = merged.find((item) => item.id === session.id);
+      if (!existing) return [...merged, session];
+      return existing.updatedAt >= session.updatedAt ? merged : merged.map((item) => item.id === session.id ? session : item);
+    }, []).sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 30);
+    const bookmarks = [...state.bookmarks, ...remote.bookmarks].filter((bookmark, index, all) =>
+      all.findIndex((item) => item.message.id === bookmark.message.id) === index
+    );
+    const notes = [...state.notes, ...remote.notes].filter((note, index, all) =>
+      all.findIndex((item) => item.id === note.id) === index
+    );
+    const useRemoteCurrent = state.messages.length === 0 && remote.messages.length > 0;
+    return {
+      sessions, bookmarks, notes,
+      ...(useRemoteCurrent ? {
+        messages: remote.messages,
+        selectedEra: remote.selectedEra,
+        activeEra: remote.activeEra,
+        currentSessionId: remote.currentSessionId,
+      } : {}),
+    };
+  }),
 
   sendMessage: async (question: string) => {
     const trimmed = question.trim();

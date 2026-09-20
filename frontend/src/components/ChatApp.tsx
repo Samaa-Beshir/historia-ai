@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChatWindow } from "@/components/ChatWindow";
+import { CloudAccount } from "@/components/CloudAccount";
 import { EraTimeline } from "@/components/EraTimeline";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WorkspacePanel, type WorkspaceView } from "@/components/WorkspacePanel";
@@ -81,6 +82,7 @@ export function ChatApp() {
           </div>
           <div className="command-controls"><ThemeToggle />
             <button className="language-button" onClick={() => setLanguage(isArabic ? "en" : "ar")}>◎ <span>{isArabic ? "EN" : "ع"}</span></button>
+            <CloudAccount language={language} />
             <button className="control-button" disabled title={isArabic ? "قريبًا" : "Coming soon"}>⚙</button>
           </div>
         </header>

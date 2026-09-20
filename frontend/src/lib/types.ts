@@ -45,6 +45,16 @@ export interface HistoriaNote {
   createdAt: number;
 }
 
+export interface WorkspaceSnapshot {
+  messages: ChatMessage[];
+  selectedEra: string | null;
+  activeEra: string | null;
+  currentSessionId: string | null;
+  sessions: ConversationSession[];
+  bookmarks: SavedBookmark[];
+  notes: HistoriaNote[];
+}
+
 export interface DocumentSummary {
   document_id: string;
   title: string;

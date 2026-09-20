@@ -141,9 +141,32 @@ pre-downloads the ~167MB ONNX model so neither happens on the cold-start path.
 Import the repo with **Root Directory** set to `frontend`, and set:
 
 - `NEXT_PUBLIC_API_BASE_URL` — the Render service URL.
+- `NEXT_PUBLIC_SUPABASE_URL` — the public Supabase project URL.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — the public/anon Supabase key (never use
+  `service_role` in Vercel frontend variables).
 
 This is inlined at build time, so changing it requires a redeploy, not just a
 restart.
+
+### Google login and cloud workspace sync
+
+Historia continues to work locally without an account. To enable Google-only
+login and sync History, Bookmarks, and Notes across devices:
+
+1. Create a Supabase project and run
+   `supabase/migrations/001_user_workspaces.sql` in its SQL Editor.
+2. In Google Auth Platform create a **Web application** OAuth client. Add the
+   Historia Vercel origin under Authorized JavaScript origins, and add the
+   callback URL shown on Supabase's Google provider page under Authorized
+   redirect URIs.
+3. In Supabase Authentication > Providers > Google, enable Google and enter
+   the Google Client ID and Client Secret.
+4. In Supabase Authentication > URL Configuration, set the Site URL to the
+   production Vercel URL and add local/preview redirect URLs only when needed.
+5. Add the two public Supabase variables above to Vercel and redeploy.
+
+The table has Row Level Security enabled: authenticated users can only read or
+write the row whose `user_id` matches their own Auth ID.
 
 ### Free-tier caveats
 

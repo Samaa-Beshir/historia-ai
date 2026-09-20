@@ -45,6 +45,25 @@ button { font: inherit; }
 .control-button:hover:not(:disabled), .language-button:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, rgba(0,0,0,.4)); }
 .control-button:disabled { cursor: default; opacity: .55; }
 .language-button { display: flex; padding: 0 12px; gap: 7px; }
+.google-login { display: flex; align-items: center; height: 39px; gap: 7px; padding: 0 12px; border: 1px solid rgba(255,255,255,.14); border-radius: 11px; color: rgba(255,255,255,.78); background: rgba(0,0,0,.34); cursor: pointer; }
+.google-login b { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; color: #fff; background: conic-gradient(from -45deg, #4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0); font-size: 11px; }
+.google-login span { font-size: 10px; white-space: nowrap; }
+.google-login:hover { border-color: var(--accent); }
+.account-menu-wrap { position: relative; direction: ltr; }
+.account-button { position: relative; display: grid; width: 39px; height: 39px; place-items: center; overflow: visible; border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.12)); border-radius: 50%; color: var(--accent-soft); background: rgba(0,0,0,.4); font-weight: 600; cursor: pointer; }
+.account-button > span { position: absolute; inset: 2px; border-radius: inherit; background-position: center; background-size: cover; }
+.account-button.setup { border-style: dashed; cursor: default; opacity: .5; }
+.sync-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #7b7b7b; }
+.account-button .sync-dot { position: absolute; right: -1px; bottom: 1px; z-index: 2; outline: 2px solid #100d09; }
+.sync-dot.synced { background: #67c985; box-shadow: 0 0 7px rgba(103,201,133,.7); }
+.sync-dot.syncing { background: #e0af52; animation: syncPulse 1s ease infinite; }
+.sync-dot.error { background: #e36f5a; }
+.account-popover { position: absolute; top: 47px; right: 0; z-index: 40; display: flex; width: 220px; flex-direction: column; padding: 14px; border: 1px solid color-mix(in srgb, var(--accent) 35%, rgba(255,255,255,.08)); border-radius: 13px; color: white; background: rgba(8,7,5,.96); box-shadow: 0 18px 55px rgba(0,0,0,.55); backdrop-filter: blur(18px); }
+.account-popover strong { overflow: hidden; color: var(--accent-soft); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.account-popover > small { overflow: hidden; margin-top: 2px; color: rgba(255,255,255,.4); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.account-popover p { display: flex; align-items: center; gap: 7px; margin: 12px 0; color: rgba(255,255,255,.56); font-size: 10px; }
+.account-popover button { padding: 8px 10px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; color: rgba(255,255,255,.7); background: rgba(255,255,255,.04); cursor: pointer; }
+.account-popover button:hover { border-color: var(--accent); color: white; }
 .mobile-menu, .mobile-brand { display: none; }
 
 .experience-body { position: relative; display: flex; min-height: 0; padding: 18px 24px 12px; }
@@ -161,6 +180,7 @@ button { font: inherit; }
 @keyframes portalSpin { to { transform: rotate(360deg); } }
 @keyframes answerIn { from { opacity: 0; transform: translateY(7px); } }
 @keyframes workspaceIn { from { opacity: 0; transform: translateY(8px) scale(.99); } }
+@keyframes syncPulse { 50% { opacity: .35; transform: scale(.8); } }
 
 @media (max-width: 1050px) {
   .historia-shell { grid-template-columns: 210px minmax(0,1fr); }
@@ -182,6 +202,8 @@ button { font: inherit; }
   .mobile-brand { display: block; padding-inline: 9px; color: var(--accent-soft); font-size: 12px; }
   .era-plaque { display: none; }
   .command-controls .control-button:last-child { display: none; }
+  .google-login span { display: none; }
+  .google-login { width: 39px; padding: 0; justify-content: center; }
   .experience-body { padding: 10px; }
   .chat-column { width: 100%; }
   .chat-heading { padding: 0 5px 9px; }
