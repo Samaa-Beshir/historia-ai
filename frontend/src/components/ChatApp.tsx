@@ -4,14 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import { ChatWindow } from "@/components/ChatWindow";
 import { EraTimeline } from "@/components/EraTimeline";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { WorkspacePanel, type WorkspaceView } from "@/components/WorkspacePanel";
 import { getEraTheme } from "@/lib/eras";
 import { useChatStore } from "@/store/chatStore";
 
 type UiLanguage = "en" | "ar";
 const NAV_ITEMS = [
-  { icon: "◷", en: "History", ar: "السجل" }, { icon: "◇", en: "Bookmarks", ar: "المحفوظات" },
-  { icon: "▤", en: "Sources", ar: "المصادر" }, { icon: "⌛", en: "Timeline", ar: "الخط الزمني" },
-  { icon: "✎", en: "My Notes", ar: "ملاحظاتي" },
+  { view: "history", icon: "◷", en: "History", ar: "السجل" },
+  { view: "bookmarks", icon: "◇", en: "Bookmarks", ar: "المحفوظات" },
+  { view: "sources", icon: "▤", en: "Sources", ar: "المصادر" },
+  { view: "timeline", icon: "⌛", en: "Timeline", ar: "الخط الزمني" },
+  { view: "notes", icon: "✎", en: "My Notes", ar: "ملاحظاتي" },
 ] as const;
 
 export function ChatApp() {
@@ -23,6 +26,7 @@ export function ChatApp() {
   const [isTraveling, setIsTraveling] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [language, setLanguage] = useState<UiLanguage>("en");
+  const [activeView, setActiveView] = useState<WorkspaceView | null>(null);
 
   useEffect(() => {
     if (previousEra.current === activeEra) return;
@@ -53,10 +57,11 @@ export function ChatApp() {
         <div className="brand-lockup"><span className="brand-mark">𓂀</span><div>
           <strong>HISTORIA AI</strong><small>{isArabic ? "مساعدك للبحث التاريخي" : "Your AI Historical Research Assistant"}</small>
         </div></div>
-        <button className="new-chat-button" onClick={() => { resetChat(); setSidebarOpen(false); }}><span>▰</span>{isArabic ? "محادثة جديدة" : "New Chat"}</button>
+        <button className="new-chat-button" onClick={() => { resetChat(); setActiveView(null); setSidebarOpen(false); }}><span>▰</span>{isArabic ? "محادثة جديدة" : "New Chat"}</button>
         <nav className="side-navigation" aria-label="Primary navigation">
-          {NAV_ITEMS.map((item) => <button key={item.en} disabled title={isArabic ? "قريبًا" : "Coming soon"}>
-            <span>{item.icon}</span>{isArabic ? item.ar : item.en}<small>{isArabic ? "قريبًا" : "Soon"}</small>
+          {NAV_ITEMS.map((item) => <button key={item.en} className={activeView === item.view ? "active" : ""}
+            onClick={() => { setActiveView(activeView === item.view ? null : item.view); setSidebarOpen(false); }}>
+            <span>{item.icon}</span>{isArabic ? item.ar : item.en}<small>›</small>
           </button>)}
         </nav>
         <div className="sidebar-spacer" />
@@ -86,6 +91,7 @@ export function ChatApp() {
             <p>{isArabic ? "اسأل بأي لغة، وسنبحث في المصادر التاريخية." : "Ask in any language. Historia searches the historical record."}</p>
           </div><div className="chat-panel"><ChatWindow language={language} /></div></section>
           <aside className="scene-caption" aria-label="Era atmosphere"><span>{theme.motif}</span><p>“{theme.motto}”</p><small>{theme.scene}</small></aside>
+          {activeView && <WorkspacePanel view={activeView} language={language} onClose={() => setActiveView(null)} />}
         </main>
         <footer className="timeline-dock"><EraTimeline language={language} /></footer>
       </section>

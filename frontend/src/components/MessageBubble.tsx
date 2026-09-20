@@ -3,6 +3,7 @@
 import { Fragment, type ReactNode, useEffect, useState } from "react";
 
 import type { ChatMessage } from "@/lib/types";
+import { useChatStore } from "@/store/chatStore";
 
 // The API is hosted on a free tier that sleeps after inactivity and takes about
 // a minute to wake. Past this point a silent spinner reads as a broken app, so
@@ -107,9 +108,12 @@ function PendingIndicator() {
 
 export function MessageBubble({ message }: { message: ChatMessage }) {
   const [showSources, setShowSources] = useState(false);
+  const bookmarks = useChatStore((state) => state.bookmarks);
+  const toggleBookmark = useChatStore((state) => state.toggleBookmark);
   const isUser = message.role === "user";
   const displayedText = message.error ?? message.text;
   const isArabic = isArabicText(displayedText);
+  const isBookmarked = bookmarks.some((bookmark) => bookmark.message.id === message.id);
 
   return (
     <div className={`message-row flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -135,17 +139,17 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
           )}
         </div>
 
-        {!isUser && !message.pending && message.sources && message.sources.length > 0 && (
+        {!isUser && !message.pending && !message.error && (
           <div className="w-full" dir={isArabic ? "rtl" : "ltr"}>
-            <button
-              onClick={() => setShowSources((v) => !v)}
-              className="sources-toggle"
-            >
-              {isArabic
-                ? `${showSources ? "إخفاء" : "عرض"} ${message.sources.length} مصادر`
-                : `${showSources ? "Hide" : "Show"} ${message.sources.length} source${message.sources.length === 1 ? "" : "s"}`}
-            </button>
-            {showSources && (
+            <div className="message-actions">
+              {message.sources && message.sources.length > 0 && <button onClick={() => setShowSources((v) => !v)} className="sources-toggle">
+                {isArabic ? `${showSources ? "إخفاء" : "عرض"} ${message.sources.length} مصادر`
+                  : `${showSources ? "Hide" : "Show"} ${message.sources.length} source${message.sources.length === 1 ? "" : "s"}`}
+              </button>}
+              <button className={`bookmark-button ${isBookmarked ? "active" : ""}`} onClick={() => toggleBookmark(message)}
+                aria-label={isArabic ? "حفظ الإجابة" : "Save answer"}>{isBookmarked ? "◆" : "◇"}</button>
+            </div>
+            {showSources && message.sources && (
               <ul className="mt-2 flex flex-col gap-2">
                 {message.sources.map((source, i) => {
                   const sourceIsArabic = isArabicText(`${source.title} ${source.author} ${source.snippet}`);
