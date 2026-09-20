@@ -1,0 +1,221 @@
+{
+  "top_k": 5,
+  "overall": {
+    "cases": 14,
+    "hits": 14,
+    "hit_rate": 1.0,
+    "mean_reciprocal_rank": 0.9524
+  },
+  "by_language": {
+    "ar": {
+      "cases": 7,
+      "hits": 7,
+      "hit_rate": 1.0,
+      "mean_reciprocal_rank": 1.0
+    },
+    "en": {
+      "cases": 7,
+      "hits": 7,
+      "hit_rate": 1.0,
+      "mean_reciprocal_rank": 0.9048
+    }
+  },
+  "results": [
+    {
+      "case_id": "october-deception-en",
+      "pair_id": "october-deception",
+      "language": "en",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9"
+      ]
+    },
+    {
+      "case_id": "october-deception-ar",
+      "pair_id": "october-deception",
+      "language": "ar",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9",
+        "5997e4e3-6f0b-5e86-8328-b07d4317aff9"
+      ]
+    },
+    {
+      "case_id": "suez-crossing-en",
+      "pair_id": "suez-crossing",
+      "language": "en",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935"
+      ]
+    },
+    {
+      "case_id": "suez-crossing-ar",
+      "pair_id": "suez-crossing",
+      "language": "ar",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935",
+        "e443c90d-f3d1-5f0e-bd70-eca538d0a935"
+      ]
+    },
+    {
+      "case_id": "sadat-commander-en",
+      "pair_id": "sadat-commander",
+      "language": "en",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c"
+      ]
+    },
+    {
+      "case_id": "sadat-commander-ar",
+      "pair_id": "sadat-commander",
+      "language": "ar",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c",
+        "6717c97f-d510-55e1-98b4-66d5be483e3c"
+      ]
+    },
+    {
+      "case_id": "saladin-hattin-en",
+      "pair_id": "saladin-hattin",
+      "language": "en",
+      "first_relevant_rank": 3,
+      "reciprocal_rank": 0.3333,
+      "retrieved_document_ids": [
+        "42e5422e-dd4b-5770-939c-0ef4abed8f94",
+        "c36a421e-02c0-5238-b8fd-476393ae1355",
+        "aab1ad06-1698-5abd-91e1-7c530ea6b32a",
+        "c36a421e-02c0-5238-b8fd-476393ae1355",
+        "aab1ad06-1698-5abd-91e1-7c530ea6b32a"
+      ]
+    },
+    {
+      "case_id": "saladin-hattin-ar",
+      "pair_id": "saladin-hattin",
+      "language": "ar",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "aab1ad06-1698-5abd-91e1-7c530ea6b32a",
+        "42e5422e-dd4b-5770-939c-0ef4abed8f94",
+        "c36a421e-02c0-5238-b8fd-476393ae1355",
+        "aab1ad06-1698-5abd-91e1-7c530ea6b32a",
+        "aab1ad06-1698-5abd-91e1-7c530ea6b32a"
+      ]
+    },
+    {
+      "case_id": "muhammad-ali-reforms-en",
+      "pair_id": "muhammad-ali-reforms",
+      "language": "en",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e"
+      ]
+    },
+    {
+      "case_id": "muhammad-ali-reforms-ar",
+      "pair_id": "muhammad-ali-reforms",
+      "language": "ar",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e",
+        "8e73fdd4-14f5-518c-a50e-ba3bc732175e"
+      ]
+    },
+    {
+      "case_id": "coptic-churches-en",
+      "pair_id": "coptic-churches",
+      "language": "en",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa"
+      ]
+    },
+    {
+      "case_id": "coptic-churches-ar",
+      "pair_id": "coptic-churches",
+      "language": "ar",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa",
+        "44359198-3a5b-55c3-b3e7-f034fab6c9aa"
+      ]
+    },
+    {
+      "case_id": "ptolemaic-papyri-en",
+      "pair_id": "ptolemaic-papyri",
+      "language": "en",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58"
+      ]
+    },
+    {
+      "case_id": "ptolemaic-papyri-ar",
+      "pair_id": "ptolemaic-papyri",
+      "language": "ar",
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "retrieved_document_ids": [
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58",
+        "4ac34eee-e4e3-5794-b941-40bbee8dae58"
+      ]
+    }
+  ]
+}
