@@ -17,6 +17,7 @@ data/row/
 # `python -m app.scripts.prepare_index` at deploy time.
 data/chroma/
 data/chroma_experiments/
+data/chroma_gemini_index.tar.gz
 data/embedding_cache/
 
 # chunks.jsonl is tracked (see !rule below) so the index can be rebuilt
