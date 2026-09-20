@@ -56,6 +56,10 @@ project folder. It builds the V2 multilingual index using the Gemini free tier
 with conservative 32-chunk batches and waits between them to respect its rate
 limits.
 
+For a paid Tier 1 project, use `build_gemini_index_tier1_windows.bat` instead.
+It resumes the same index with 64-chunk batches and a short delay, while keeping
+automatic retries for temporary rate-limit errors.
+
 Keep the terminal window open until it reports completion. Progress is saved
 after every batch: if the process stops, run the same file again and it resumes
 without embedding completed chunks again. The API key is read from `.env` and
