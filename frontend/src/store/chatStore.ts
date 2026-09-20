@@ -9,6 +9,7 @@ interface ChatState {
   activeEra: string | null;
   isSending: boolean;
   setEra: (era: string | null) => void;
+  resetChat: () => void;
   sendMessage: (question: string) => Promise<void>;
 }
 
@@ -22,6 +23,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   isSending: false,
 
   setEra: (era) => set({ selectedEra: era, activeEra: era }),
+  resetChat: () => set({ messages: [], selectedEra: null, activeEra: null, isSending: false }),
 
   sendMessage: async (question: string) => {
     const trimmed = question.trim();

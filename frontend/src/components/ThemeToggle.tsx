@@ -28,16 +28,16 @@ export function ThemeToggle() {
         onClick={toggle}
         aria-label="Toggle theme"
         suppressHydrationWarning
-        className="shrink-0 rounded-full border border-white/15 bg-white/5 h-9 w-9 flex items-center justify-center text-base cursor-pointer hover:bg-white/10 transition-colors"
+        className="control-button"
       >
-        {isDark ? "☀️" : "🌙"}
+        {isDark ? "☼" : "☾"}
       </button>
       {/* Corrects the icon text in the DOM before hydration, matching the
           class the theme-init script already applied to <html>. Without
           this, SSR always renders the light-mode icon and hydration flags a
           mismatch when the client's actual theme is dark. */}
       <InlineScript
-        html={`{var b=document.getElementById(${JSON.stringify(id)});if(b)b.textContent=document.documentElement.classList.contains("dark")?"☀️":"🌙"}`}
+        html={`{var b=document.getElementById(${JSON.stringify(id)});if(b)b.textContent=document.documentElement.classList.contains("dark")?"☼":"☾"}`}
       />
     </>
   );

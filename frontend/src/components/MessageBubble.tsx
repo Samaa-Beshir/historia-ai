@@ -112,15 +112,16 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
   const isArabic = isArabicText(displayedText);
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-      <div className={`max-w-[92%] sm:max-w-[78%] ${isUser ? "items-end" : "items-start"} flex flex-col gap-1.5`}>
+    <div className={`message-row flex ${isUser ? "justify-end" : "justify-start"}`}>
+      {!isUser && <span className="assistant-seal" aria-hidden="true">𓂀</span>}
+      <div className={`max-w-[94%] sm:max-w-[88%] ${isUser ? "items-end" : "items-start"} flex flex-col gap-1.5`}>
         <div
           dir={isArabic ? "rtl" : "ltr"}
           lang={isArabic ? "ar" : "en"}
-          className={`w-full rounded-2xl px-4 py-3 text-sm leading-7 ${isArabic ? "text-right" : "text-left"} ${
+          className={`message-bubble w-full rounded-2xl px-4 py-3 text-sm leading-7 ${isArabic ? "text-right" : "text-left"} ${
             isUser
-              ? "bg-[var(--accent)] text-[var(--on-accent)] rounded-br-sm"
-              : "bg-white/[0.08] text-white rounded-bl-sm border border-white/[0.06]"
+              ? "user-bubble text-[var(--on-accent)] rounded-br-sm"
+              : "assistant-bubble text-white rounded-bl-sm"
           }`}
         >
           {message.pending ? (
@@ -138,7 +139,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
           <div className="w-full" dir={isArabic ? "rtl" : "ltr"}>
             <button
               onClick={() => setShowSources((v) => !v)}
-              className="text-xs text-white/50 hover:text-white/85 cursor-pointer underline decoration-dotted underline-offset-2"
+              className="sources-toggle"
             >
               {isArabic
                 ? `${showSources ? "إخفاء" : "عرض"} ${message.sources.length} مصادر`
@@ -152,7 +153,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
                     <li
                       key={`${source.document_id}-${i}`}
                       dir={sourceIsArabic ? "rtl" : "ltr"}
-                      className={`rounded-xl border border-white/10 px-3 py-2 text-xs bg-black/20 ${sourceIsArabic ? "text-right" : "text-left"}`}
+                      className={`source-card ${sourceIsArabic ? "text-right" : "text-left"}`}
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-medium text-white/90">

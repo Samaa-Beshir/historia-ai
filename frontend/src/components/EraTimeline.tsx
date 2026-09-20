@@ -1,73 +1,25 @@
 "use client";
-
 import { useEffect, useState } from "react";
-
 import { getEras } from "@/lib/api";
 import { orderEras } from "@/lib/eras";
 import { useChatStore } from "@/store/chatStore";
 
-export function EraTimeline() {
+export function EraTimeline({ language = "en" }: { language?: "en" | "ar" }) {
   const [eras, setEras] = useState<string[]>([]);
   const selectedEra = useChatStore((s) => s.selectedEra);
   const setEra = useChatStore((s) => s.setEra);
-
-  useEffect(() => {
-    getEras()
-      .then((res) => setEras(res.eras))
-      .catch(() => setEras([]));
-  }, []);
-
-  const themes = orderEras(eras);
-
-  return (
-    <div className="w-full overflow-x-auto">
-      <div className="flex items-stretch gap-2 min-w-max px-1 py-2">
-        <button
-          onClick={() => setEra(null)}
-          className={`shrink-0 rounded-xl border px-4 py-2 text-sm font-medium transition-all cursor-pointer ${
-            selectedEra === null
-              ? "border-transparent bg-[var(--accent)] text-[var(--on-accent)] shadow-sm"
-              : "border-white/15 text-white/65 hover:border-[var(--accent)] hover:text-white"
-          }`}
-        >
-          All Eras
-        </button>
-
-        <div className="relative flex items-center gap-2">
-          {themes.map((theme, index) => {
-            const isSelected = selectedEra === theme.era;
-            return (
-              <button
-                key={theme.era}
-                onClick={() => setEra(isSelected ? null : theme.era)}
-                title={theme.range}
-                className={`group shrink-0 relative rounded-xl border px-4 py-2 text-left transition-all cursor-pointer ${
-                  isSelected
-                    ? "shadow-sm"
-                    : "border-white/15 text-white/70 hover:border-white/35 hover:text-white"
-                }`}
-                style={
-                  isSelected
-                    ? { backgroundColor: theme.accent, color: theme.onAccent, borderColor: "transparent" }
-                    : undefined
-                }
-              >
-                {index > 0 && (
-                  <span className="absolute -left-2 top-1/2 h-px w-2 -translate-y-1/2 bg-white/15" />
-                )}
-                <div className="text-sm font-medium whitespace-nowrap">{theme.label}</div>
-                <div
-                  className={`text-[11px] whitespace-nowrap ${
-                    isSelected ? "opacity-80" : "opacity-50"
-                  }`}
-                >
-                  {theme.range}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
+  useEffect(() => { getEras().then((res) => setEras(res.eras)).catch(() => setEras([])); }, []);
+  return <div className="era-timeline" dir="ltr">
+    <button className={`timeline-all ${selectedEra === null ? "active" : ""}`} onClick={() => setEra(null)}>
+      <span>⌛</span><strong>{language === "ar" ? "كل العصور" : "All Eras"}</strong>
+    </button>
+    {orderEras(eras).map((theme) => {
+      const active = selectedEra === theme.era;
+      return <button key={theme.era} className={`timeline-era ${active ? "active" : ""}`} onClick={() => setEra(active ? null : theme.era)}>
+        <span className="timeline-dot">{theme.motif}</span><span className="timeline-copy">
+          <strong>{language === "ar" ? theme.arabicLabel : theme.label}</strong><small>{theme.range}</small>
+        </span>
+      </button>;
+    })}
+  </div>;
 }
