@@ -24,3 +24,164 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+.historia-shell {
+  background: #070b0f;
+  color: white;
+}
+
+.era-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  background-image: var(--era-background);
+  background-size: cover;
+  transition: background-image 1.2s ease, filter 1.2s ease;
+}
+
+.era-atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(2, 5, 8, 0.18), rgba(2, 5, 8, 0.02) 48%, rgba(2, 5, 8, 0.22));
+  pointer-events: none;
+}
+
+.era-glow {
+  position: absolute;
+  top: -18%;
+  right: 3%;
+  width: 55vw;
+  height: 55vw;
+  border-radius: 999px;
+  background: var(--era-glow);
+  filter: blur(80px);
+  animation: breathe 7s ease-in-out infinite;
+}
+
+.era-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.11;
+  background-image: linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+  background-size: 62px 62px;
+  mask-image: linear-gradient(to bottom, transparent, black 30%, transparent 88%);
+}
+
+.era-emblem {
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: clamp(16rem, 31vw, 34rem);
+  line-height: 1;
+  opacity: 0.055;
+  text-shadow: 0 0 90px var(--era-glow);
+  animation: emblemFloat 9s ease-in-out infinite;
+  user-select: none;
+}
+
+.era-horizon {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: -18%;
+  height: 45%;
+  border-radius: 50% 50% 0 0;
+  background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.06));
+  filter: blur(8px);
+}
+
+.era-caption {
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  padding-left: 1.25rem;
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.45);
+  animation: captionIn 900ms ease both;
+}
+
+.time-travel-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: radial-gradient(circle at center, var(--era-glow), rgba(3, 6, 8, .92) 55%);
+  backdrop-filter: blur(14px);
+  pointer-events: none;
+  animation: travelOverlay 2.3s ease both;
+}
+
+.portal-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 9.5rem;
+  height: 9.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 80%, white);
+  border-radius: 999px;
+  box-shadow: 0 0 25px var(--era-glow), inset 0 0 30px var(--era-glow);
+  animation: portalPulse 1.15s ease-in-out infinite;
+}
+
+.portal-ring::before,
+.portal-ring::after {
+  content: "";
+  position: absolute;
+  inset: -1rem;
+  border: 1px dashed rgba(255, 255, 255, 0.24);
+  border-radius: inherit;
+  animation: portalSpin 8s linear infinite;
+}
+
+.portal-ring::after {
+  inset: .7rem;
+  animation-direction: reverse;
+  animation-duration: 5s;
+}
+
+.portal-ring span {
+  font-size: 3rem;
+  color: var(--accent);
+  filter: drop-shadow(0 0 15px var(--era-glow));
+}
+
+.answer-arrival {
+  animation: answerIn 550ms ease both;
+}
+
+@keyframes travelOverlay {
+  0% { opacity: 0; transform: scale(1.04); }
+  14%, 74% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(.98); }
+}
+
+@keyframes portalPulse {
+  50% { transform: scale(1.08); box-shadow: 0 0 55px var(--era-glow), inset 0 0 36px var(--era-glow); }
+}
+
+@keyframes portalSpin { to { transform: rotate(360deg); } }
+@keyframes breathe { 50% { transform: scale(1.12); opacity: .72; } }
+@keyframes emblemFloat { 50% { transform: translateY(calc(-50% - 12px)) rotate(1deg); } }
+@keyframes captionIn { from { opacity: 0; transform: translateY(12px); } }
+@keyframes answerIn { from { opacity: 0; transform: translateY(7px); } }
+
+@media (max-width: 640px) {
+  .era-emblem { right: -18vw; opacity: .045; }
+  .time-travel-overlay { padding: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .era-glow,
+  .era-emblem,
+  .portal-ring,
+  .portal-ring::before,
+  .portal-ring::after,
+  .answer-arrival,
+  .era-caption { animation: none !important; }
+  .time-travel-overlay { animation-duration: 350ms; }
+}

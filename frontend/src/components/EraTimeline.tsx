@@ -27,7 +27,7 @@ export function EraTimeline() {
           className={`shrink-0 rounded-xl border px-4 py-2 text-sm font-medium transition-all cursor-pointer ${
             selectedEra === null
               ? "border-transparent bg-[var(--accent)] text-[var(--on-accent)] shadow-sm"
-              : "border-black/10 dark:border-white/10 text-neutral-500 hover:border-[var(--accent)]/40"
+              : "border-white/15 text-white/65 hover:border-[var(--accent)] hover:text-white"
           }`}
         >
           All Eras
@@ -44,7 +44,7 @@ export function EraTimeline() {
                 className={`group shrink-0 relative rounded-xl border px-4 py-2 text-left transition-all cursor-pointer ${
                   isSelected
                     ? "shadow-sm"
-                    : "border-black/10 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20"
+                    : "border-white/15 text-white/70 hover:border-white/35 hover:text-white"
                 }`}
                 style={
                   isSelected
@@ -53,7 +53,7 @@ export function EraTimeline() {
                 }
               >
                 {index > 0 && (
-                  <span className="absolute -left-2 top-1/2 h-px w-2 -translate-y-1/2 bg-black/10 dark:bg-white/15" />
+                  <span className="absolute -left-2 top-1/2 h-px w-2 -translate-y-1/2 bg-white/15" />
                 )}
                 <div className="text-sm font-medium whitespace-nowrap">{theme.label}</div>
                 <div

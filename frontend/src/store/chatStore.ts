@@ -6,6 +6,7 @@ import type { ChatMessage } from "@/lib/types";
 interface ChatState {
   messages: ChatMessage[];
   selectedEra: string | null;
+  activeEra: string | null;
   isSending: boolean;
   setEra: (era: string | null) => void;
   sendMessage: (question: string) => Promise<void>;
@@ -17,9 +18,10 @@ const makeId = () => `msg-${++nextId}-${Date.now()}`;
 export const useChatStore = create<ChatState>((set, get) => ({
   messages: [],
   selectedEra: null,
+  activeEra: null,
   isSending: false,
 
-  setEra: (era) => set({ selectedEra: era }),
+  setEra: (era) => set({ selectedEra: era, activeEra: era }),
 
   sendMessage: async (question: string) => {
     const trimmed = question.trim();
@@ -37,12 +39,18 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
     try {
       const response = await postChat(trimmed, era);
+      const detectedEra = response.sources.reduce<Record<string, number>>((scores, source) => {
+        scores[source.era] = (scores[source.era] ?? 0) + Math.max(source.relevance, 0.01);
+        return scores;
+      }, {});
+      const dominantEra = Object.entries(detectedEra).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
       set((state) => ({
         messages: state.messages.map((m) =>
           m.id === pendingId
             ? { ...m, text: response.answer, sources: response.sources, pending: false }
             : m
         ),
+        activeEra: state.selectedEra ?? dominantEra ?? state.activeEra,
         isSending: false,
       }));
     } catch (error) {

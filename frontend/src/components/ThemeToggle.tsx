@@ -28,7 +28,7 @@ export function ThemeToggle() {
         onClick={toggle}
         aria-label="Toggle theme"
         suppressHydrationWarning
-        className="shrink-0 rounded-full border border-black/10 dark:border-white/10 h-9 w-9 flex items-center justify-center text-base cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
+        className="shrink-0 rounded-full border border-white/15 bg-white/5 h-9 w-9 flex items-center justify-center text-base cursor-pointer hover:bg-white/10 transition-colors"
       >
         {isDark ? "☀️" : "🌙"}
       </button>

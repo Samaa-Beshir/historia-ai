@@ -32,7 +32,7 @@ function MarkdownAnswer({ text }: { text: string }) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
 
   return (
-    <div className="space-y-2.5">
+    <div className="answer-arrival space-y-2.5">
       {lines.map((rawLine, index) => {
         const line = rawLine.trim();
         if (!line) return null;
@@ -120,7 +120,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
           className={`w-full rounded-2xl px-4 py-3 text-sm leading-7 ${isArabic ? "text-right" : "text-left"} ${
             isUser
               ? "bg-[var(--accent)] text-[var(--on-accent)] rounded-br-sm"
-              : "bg-black/[0.04] dark:bg-white/[0.06] text-neutral-900 dark:text-neutral-100 rounded-bl-sm"
+              : "bg-white/[0.08] text-white rounded-bl-sm border border-white/[0.06]"
           }`}
         >
           {message.pending ? (
@@ -138,7 +138,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
           <div className="w-full" dir={isArabic ? "rtl" : "ltr"}>
             <button
               onClick={() => setShowSources((v) => !v)}
-              className="text-xs text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 cursor-pointer underline decoration-dotted underline-offset-2"
+              className="text-xs text-white/50 hover:text-white/85 cursor-pointer underline decoration-dotted underline-offset-2"
             >
               {isArabic
                 ? `${showSources ? "إخفاء" : "عرض"} ${message.sources.length} مصادر`
@@ -152,18 +152,18 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
                     <li
                       key={`${source.document_id}-${i}`}
                       dir={sourceIsArabic ? "rtl" : "ltr"}
-                      className={`rounded-lg border border-black/10 dark:border-white/10 px-3 py-2 text-xs bg-white/60 dark:bg-black/20 ${sourceIsArabic ? "text-right" : "text-left"}`}
+                      className={`rounded-xl border border-white/10 px-3 py-2 text-xs bg-black/20 ${sourceIsArabic ? "text-right" : "text-left"}`}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-neutral-800 dark:text-neutral-100">
+                        <span className="font-medium text-white/90">
                           [{i + 1}] {source.title}
                         </span>
                         <span className="shrink-0 rounded-full bg-[var(--accent-soft)] text-[var(--accent)] px-2 py-0.5 text-[10px] font-medium">
                           {source.era}
                         </span>
                       </div>
-                      <div className="mt-0.5 text-neutral-500">{source.author}</div>
-                      <p className="mt-1 text-neutral-600 dark:text-neutral-400 line-clamp-3">{source.snippet}</p>
+                      <div className="mt-0.5 text-white/45">{source.author}</div>
+                      <p className="mt-1 text-white/60 line-clamp-3">{source.snippet}</p>
                     </li>
                   );
                 })}
