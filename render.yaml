@@ -3,10 +3,9 @@
 # The frontend is deployed separately to Vercel (rootDir: frontend) and reaches
 # this service over REST, per docs/FRONTEND_GUIDELINES.md.
 #
-# rootDir is `backend`, but Settings resolves data paths from PROJECT_ROOT
+# rootDir is backend, but Settings resolves data paths from PROJECT_ROOT
 # (= backend/..), so the repo's data/ directory is still found. The build step
-# expands data/chroma_index.tar.gz and pre-downloads the ONNX embedding model
-# so neither lands on the cold-start path.
+# expands data/chroma_index.tar.gz; Gemini embeddings require no local model.
 services:
   - name: historia-ai-api
     type: web
@@ -29,6 +28,24 @@ services:
         value: gemini-3.6-flash
       - key: LLM_MAX_OUTPUT_TOKENS
         value: "4096"
+      - key: EMBEDDING_PROVIDER
+        value: gemini
+      - key: EMBEDDING_MODEL_NAME
+        value: gemini-embedding-001
+      - key: EMBEDDING_OUTPUT_DIMENSIONALITY
+        value: "768"
+      - key: EMBEDDING_DOCUMENT_TASK_TYPE
+        value: RETRIEVAL_DOCUMENT
+      - key: EMBEDDING_QUERY_TASK_TYPE
+        value: QUESTION_ANSWERING
+      - key: EMBEDDING_REQUEST_TIMEOUT_SECONDS
+        value: "60"
+      - key: EMBEDDING_MAX_RETRIES
+        value: "8"
+      - key: EMBEDDING_RATE_LIMIT_RETRY_SECONDS
+        value: "30"
+      - key: CHROMA_COLLECTION_NAME
+        value: historia_gemini_embedding_001
       - key: RETRIEVAL_TOP_K
         value: "5"
       # Set in the Render dashboard, never committed.
