@@ -31,7 +31,9 @@ button { font: inherit; }
 .era-card-motif { position: absolute; inset-inline-end: 8px; bottom: -18px; color: var(--accent); font-size: 88px; opacity: .14; }
 .era-detected-card strong { margin-top: auto; color: var(--accent-soft); font-family: Georgia, serif; font-size: 18px; }
 .era-detected-card p { width: 78%; margin: 4px 0 0; color: rgba(255,255,255,.48); font-size: 10px; line-height: 1.45; }
-.sidebar-footer { padding-top: 9px; color: rgba(255,255,255,.25); text-align: center; font-size: 9px; letter-spacing: .12em; }
+.sidebar-footer { display: flex; justify-content: space-between; gap: 8px; padding-top: 9px; color: rgba(255,255,255,.25); text-align: center; font-size: 9px; letter-spacing: .08em; }
+.sidebar-footer a { color: inherit; text-decoration: none; }
+.sidebar-footer a:hover { color: var(--accent); }
 
 .historia-stage { grid-column: 2; grid-row: 1; display: grid; grid-template-rows: 84px minmax(0, 1fr) 92px; min-width: 0; min-height: 0; }
 .top-command-bar { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; padding: 10px 24px; border-bottom: 1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(5,4,3,.72), rgba(5,4,3,.22)); backdrop-filter: blur(8px); }

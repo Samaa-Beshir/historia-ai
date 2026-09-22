@@ -70,7 +70,10 @@ export function ChatApp() {
           <span className="era-card-motif">{theme.motif}</span><strong>{isArabic ? theme.arabicLabel : theme.label}</strong>
           <p>{theme.range || (isArabic ? "رحلة عبر تاريخ مصر" : "A journey through Egyptian history")}</p>
         </div>
-        <div className="sidebar-footer">Historia AI · V2</div>
+        <div className="sidebar-footer">
+          <span>Historia AI · V2</span>
+          <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span>
+        </div>
       </aside>
 
       <section className="historia-stage">
